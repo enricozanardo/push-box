@@ -40,7 +40,6 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		// Add the device to the user if not already present
-
 		expotoken := string(data.Token.Value)
 		device := pb_account.ExpoPushToken{expotoken, &accountToken }
 		resp := mygprc.AddExpoPushToken(&device)
