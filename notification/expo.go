@@ -9,7 +9,7 @@ import (
 	"github.com/onezerobinary/push-box/mygrpc"
 	pb_account "github.com/onezerobinary/db-box/proto/account"
 	"github.com/goinggo/tracelog"
-	"fmt"
+	"errors"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 )
 
 
-func SendNotification(tokens []*pb_account.Token){
+func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
 
 	notifications := []model.Notification{}
 
@@ -26,14 +26,20 @@ func SendNotification(tokens []*pb_account.Token){
 
 		account, err := mygprc.GetAccountByToken(token)
 
+		var statusCode int
+
 		if err != nil {
 			tracelog.Errorf(err, "expo", "SendNotification", "It was not possible to retrieve the account")
+			statusCode = 400
+			return &statusCode, err
 		}
 
 		// Add the device to the user if not already present
 		if account.Username == "" {
-			tracelog.Errorf(err, "expo", "SendNotification", "Account empty")
-			return
+			err = errors.New("Error: Account empty")
+			tracelog.Errorf(err, "expo", "SendNotification", "Error: Account empty")
+			statusCode = 400
+			return &statusCode, err
 		}
 
 		for _, device := range account.Expopushtoken {
@@ -44,6 +50,7 @@ func SendNotification(tokens []*pb_account.Token){
 			notification.Body = "Emergency"
 			notification.Sound = model.SOUND_DEFAULT
 			notification.Priority = model.PRIORITY_DEFAULT
+			//TODO: add data of the emergency
 			notification.Data.User = account.Username
 			notification.Badge = 1
 
@@ -70,9 +77,10 @@ func SendNotification(tokens []*pb_account.Token){
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
 
-	fmt.Println("Code:", resp.StatusCode)
-
 	if err != nil || resp.StatusCode != 200 {
 		tracelog.Error(err, "SendNotification","Error")
+		return &resp.StatusCode, err
 	}
+
+	return &resp.StatusCode, nil
 }
