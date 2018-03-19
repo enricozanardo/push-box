@@ -4,6 +4,7 @@ import (
 	"testing"
 	pb_account "github.com/onezerobinary/db-box/proto/account"
 	"github.com/goinggo/tracelog"
+	"fmt"
 )
 
 func TestSendNotification(t *testing.T) {
@@ -17,5 +18,13 @@ func TestSendNotification(t *testing.T) {
 
 	tokens = append(tokens, &token)
 
-	SendNotification(tokens)
+	status, err := SendNotification(tokens)
+
+
+	if err != nil {
+		fmt.Println("err: ", err)
+	}
+
+	fmt.Println("code: ", &status)
+
 }

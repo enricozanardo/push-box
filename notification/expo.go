@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"log"
 	"github.com/onezerobinary/push-box/model"
-	"encoding/json"
 	"net/http"
 	"github.com/onezerobinary/push-box/mygrpc"
 	pb_account "github.com/onezerobinary/db-box/proto/account"
 	"github.com/goinggo/tracelog"
 	"errors"
+	"fmt"
+	"encoding/json"
+	"io/ioutil"
 )
 
 const (
@@ -46,13 +48,13 @@ func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
 
 			notification := model.Notification{}
 			notification.To = model.ExpoPushToken(device)
-			notification.Title = "PulseRescue"
-			notification.Body = "Emergency"
+			notification.Title = "Io so dea Lazio"
+			notification.Body = "Mica do Frosinone"
 			notification.Sound = model.SOUND_DEFAULT
 			notification.Priority = model.PRIORITY_DEFAULT
 			//TODO: add data of the emergency
 			notification.Data.User = account.Username
-			notification.Badge = 1
+			notification.Badge = 0
 
 			// Add in the list the notification
 			if len(notifications) < NOTIFICATION_LIMIT {
@@ -62,10 +64,10 @@ func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
 	}
 
 	//Send the messages to all the account devices
-	json, err := json.Marshal(notifications)
+	jsonData, err := json.Marshal(notifications)
 
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", APIURL, bytes.NewReader(json))
+	req, err := http.NewRequest("POST", APIURL, bytes.NewReader(jsonData))
 
 	if err != nil {
 		log.Println("error,", err)
@@ -77,10 +79,27 @@ func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
 
-	if err != nil || resp.StatusCode != 200 {
-		tracelog.Error(err, "SendNotification","Error")
-		return &resp.StatusCode, err
+
+	//type Callback struct {
+	//		Status string 		`json:"status"`
+	//		Message string		`json:"message"`
+	//		Details struct{
+	//			Error string 	`json:"error"`
+	//			Sns struct{
+	//				StatusCode string 	`json:"statusCode"`
+	//				Reason string 	`json:"reason"`
+	//				Message string 	`json:"__message"`
+	//			} 					`json:"sns"`
+	//		} 					`json:"details"`
+	//}
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		panic(err.Error())
 	}
+
+	fmt.Println(string(body))
 
 	return &resp.StatusCode, nil
 }
