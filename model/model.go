@@ -25,8 +25,13 @@ type Notification struct {
 	Priority Priority 		`json:"priority"`
 	Badge int32 			`json:"badge"`
 	Data struct{
-		User string 		`json:"user"`
-	} 						`json:"data"`
+		Address string 			`json:"address"`
+		AddressNumber string 	`json:"addressnumber"`
+		PostalCode string 		`json:"postalcode"`
+		Place string 			`json:"place"`
+		Lat string 				`json:"lat"`
+		Lng string 				`json:"lng"`
+	} 							`json:"data"`
 }
 
 type MobileUser struct {

@@ -20,11 +20,11 @@ const (
 )
 
 
-func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
+func SendNotification(accountTokens []*pb_account.Token) (statusCode *int, err error){
 
 	notifications := []model.Notification{}
 
-	for _, token := range tokens {
+	for _, token := range accountTokens {
 
 		account, err := mygprc.GetAccountByToken(token)
 
@@ -48,12 +48,17 @@ func SendNotification(tokens []*pb_account.Token) (statusCode *int, err error){
 
 			notification := model.Notification{}
 			notification.To = model.ExpoPushToken(device)
-			notification.Title = "Io so dea Lazio"
-			notification.Body = "Mica do Frosinone"
+			notification.Title = "Emergency"
+			notification.Body = notification.Data.Address + " " + notification.Data.AddressNumber
 			notification.Sound = model.SOUND_DEFAULT
 			notification.Priority = model.PRIORITY_DEFAULT
 			//TODO: add data of the emergency
-			notification.Data.User = account.Username
+			notification.Data.Address = "Via Roma"
+			notification.Data.AddressNumber = "42"
+			notification.Data.PostalCode = "39100"
+			notification.Data.Place = "Bolzano"
+			notification.Data.Lat = "46.4894107"
+			notification.Data.Lng = "11.3208888"
 			notification.Badge = 0
 
 			// Add in the list the notification
