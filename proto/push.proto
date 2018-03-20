@@ -14,4 +14,15 @@ message PushResponse {
 
 message AccountToken {
     repeated string tokens = 1;
+    Emergency emergency = 2;
+}
+
+message Emergency {
+    string address = 1;
+    string addressNumber = 2;
+    string postalCode = 3;
+    string place = 4;
+    string lat = 5;
+    string lng = 6;
+    string time = 7;
 }
