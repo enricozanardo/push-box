@@ -3,7 +3,6 @@ package notification
 import (
 	"context"
 	pb_push "github.com/onezerobinary/push-box/proto"
-	pb_account "github.com/onezerobinary/db-box/proto/account"
 	"github.com/goinggo/tracelog"
 	"net"
 	"os"
@@ -36,16 +35,9 @@ func StartPushService(){
 	grpcServer.Serve(listen)
 }
 
-func (s *PushServiceServer) SendNotifications(ctx context.Context, accountToken *pb_push.AccountToken) (*pb_push.PushResponse, error) {
+func (s *PushServiceServer) SendNotifications(ctx context.Context, info *pb_push.Info) (*pb_push.PushResponse, error) {
 
-	tokens := []*pb_account.Token{}
-
-	for _, token := range accountToken.Tokens {
-		tmpTopken := pb_account.Token{token}
-		tokens = append(tokens, &tmpTopken)
-	}
-
-	statusCode, err := SendNotification(tokens)
+	statusCode, err := SendNotification(info)
 
 	response := pb_push.PushResponse{}
 

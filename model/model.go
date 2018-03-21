@@ -31,6 +31,7 @@ type Notification struct {
 		Place string 			`json:"place"`
 		Lat string 				`json:"lat"`
 		Lng string 				`json:"lng"`
+		Time string 			`json:"time"`
 	} 							`json:"data"`
 }
 

@@ -5,13 +5,10 @@ import (
 	"log"
 	"github.com/onezerobinary/push-box/model"
 	"net/http"
-	"github.com/onezerobinary/push-box/mygrpc"
-	pb_account "github.com/onezerobinary/db-box/proto/account"
-	"github.com/goinggo/tracelog"
-	"errors"
 	"fmt"
 	"encoding/json"
 	"io/ioutil"
+	pb_push "github.com/onezerobinary/push-box/proto"
 )
 
 const (
@@ -20,53 +17,55 @@ const (
 )
 
 
-func SendNotification(accountTokens []*pb_account.Token) (statusCode *int, err error){
+func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 
 	notifications := []model.Notification{}
 
-	for _, token := range accountTokens {
+	//for _, token := range info.DeviceTokens {
+	//
+	//	accountToken := pb_account.Token{token}
+	//	account, err := mygprc.GetAccountByToken(&accountToken)
+	//
+	//	var statusCode int
+	//
+	//	if err != nil {
+	//		tracelog.Errorf(err, "expo", "SendNotification", "It was not possible to retrieve the account")
+	//		statusCode = 400
+	//		return &statusCode, err
+	//	}
+	//
+	//	// Add the device to the user if not already present
+	//	if account.Username == "" {
+	//		err = errors.New("Error: Account empty")
+	//		tracelog.Errorf(err, "expo", "SendNotification", "Error: Account empty")
+	//		statusCode = 400
+	//		return &statusCode, err
+	//	}
 
-		account, err := mygprc.GetAccountByToken(token)
+	for _, device := range info.DeviceTokens {
 
-		var statusCode int
+		notification := model.Notification{}
+		notification.To = model.ExpoPushToken(device)
+		notification.Title = "Emergency"
+		notification.Body = info.Emergency.Address + " " + info.Emergency.AddressNumber
+		notification.Sound = model.SOUND_DEFAULT
+		notification.Priority = model.PRIORITY_DEFAULT
+		//TODO: add data of the emergency
+		notification.Data.Address = info.Emergency.Address
+		notification.Data.AddressNumber = info.Emergency.AddressNumber
+		notification.Data.PostalCode = info.Emergency.PostalCode
+		notification.Data.Place = info.Emergency.Place
+		notification.Data.Lat = info.Emergency.Lat
+		notification.Data.Lng = info.Emergency.Lng
+		notification.Data.Time = info.Emergency.Time
+		notification.Badge = 0
 
-		if err != nil {
-			tracelog.Errorf(err, "expo", "SendNotification", "It was not possible to retrieve the account")
-			statusCode = 400
-			return &statusCode, err
-		}
-
-		// Add the device to the user if not already present
-		if account.Username == "" {
-			err = errors.New("Error: Account empty")
-			tracelog.Errorf(err, "expo", "SendNotification", "Error: Account empty")
-			statusCode = 400
-			return &statusCode, err
-		}
-
-		for _, device := range account.Expopushtoken {
-
-			notification := model.Notification{}
-			notification.To = model.ExpoPushToken(device)
-			notification.Title = "Emergency"
-			notification.Body = notification.Data.Address + " " + notification.Data.AddressNumber
-			notification.Sound = model.SOUND_DEFAULT
-			notification.Priority = model.PRIORITY_DEFAULT
-			//TODO: add data of the emergency
-			notification.Data.Address = "Via Roma"
-			notification.Data.AddressNumber = "42"
-			notification.Data.PostalCode = "39100"
-			notification.Data.Place = "Bolzano"
-			notification.Data.Lat = "46.4894107"
-			notification.Data.Lng = "11.3208888"
-			notification.Badge = 0
-
-			// Add in the list the notification
-			if len(notifications) < NOTIFICATION_LIMIT {
-				notifications = append(notifications, notification)
-			}
+		// Add in the list the notification
+		if len(notifications) < NOTIFICATION_LIMIT {
+			notifications = append(notifications, notification)
 		}
 	}
+
 
 	//Send the messages to all the account devices
 	jsonData, err := json.Marshal(notifications)

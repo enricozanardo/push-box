@@ -5,15 +5,15 @@ package proto;
 
 service PushService {
     // Send Notifications to a list of Account's devices and returns Response
-    rpc SendNotifications (AccountToken) returns (PushResponse) {}
+    rpc SendNotifications (Info) returns (PushResponse) {}
 }
 
 message PushResponse {
     int32 code = 1;
 }
 
-message AccountToken {
-    repeated string tokens = 1;
+message Info {
+    repeated string deviceTokens = 1;
     Emergency emergency = 2;
 }
 
