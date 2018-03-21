@@ -30,6 +30,9 @@ deploy:
     secret_key: $$RANCHER_SECRET_KEY
     service: academicdb/push-box
     docker_image: onezerobinary/push-box:latest
+    expose:
+      - 1972:1972
+      - 8801:8801
     when:
       branch: master
 
