@@ -6,8 +6,9 @@ import (
 	"github.com/onezerobinary/push-box/model"
 	pb_account "github.com/onezerobinary/db-box/proto/account"
 	"github.com/onezerobinary/push-box/mygrpc"
+	"fmt"
 	"github.com/goinggo/tracelog"
-	"github.com/pkg/errors"
+	"errors"
 )
 
 func TokenHandler(w http.ResponseWriter, req *http.Request) {
@@ -26,6 +27,8 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		// Perform all the checks
 		token := mygprc.GenerateToken(data.User.Username, data.User.Password)
 		accountToken := pb_account.Token{token}
+
+		println(accountToken.Token)
 
 		account, err := mygprc.GetAccountByToken(&accountToken)
 
@@ -48,5 +51,10 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 			err := errors.New("Token not added to the account")
 			tracelog.Error(err, "mobile", "TokenHandler")
 		}
+
+		//TODO: Retun "" if no math is found
+		//token = ""
+
+		fmt.Fprintf(w,  token)
 	}
 }

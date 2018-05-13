@@ -42,6 +42,10 @@ func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 	//		return &statusCode, err
 	//	}
 
+	// Android -> ExponentPushToken[VqalPOCUT5DVmVUpf6Qq3B]
+	// iphone -> ExponentPushToken[APcW1mOPoMiiB_apLgu5PS]
+
+
 	for _, device := range info.DeviceTokens {
 
 		notification := model.Notification{}
@@ -50,7 +54,7 @@ func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 		notification.Body = info.Emergency.Address + " " + info.Emergency.AddressNumber
 		notification.Sound = model.SOUND_DEFAULT
 		notification.Priority = model.PRIORITY_DEFAULT
-		//TODO: add data of the emergency
+		//add data of the emergency
 		notification.Data.Address = info.Emergency.Address
 		notification.Data.AddressNumber = info.Emergency.AddressNumber
 		notification.Data.PostalCode = info.Emergency.PostalCode
@@ -82,20 +86,6 @@ func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
-
-
-	//type Callback struct {
-	//		Status string 		`json:"status"`
-	//		Message string		`json:"message"`
-	//		Details struct{
-	//			Error string 	`json:"error"`
-	//			Sns struct{
-	//				StatusCode string 	`json:"statusCode"`
-	//				Reason string 	`json:"reason"`
-	//				Message string 	`json:"__message"`
-	//			} 					`json:"sns"`
-	//		} 					`json:"details"`
-	//}
 
 	body, err := ioutil.ReadAll(resp.Body)
 
