@@ -26,7 +26,12 @@ func main() {
 		port = DEFAULT_PORT
 	}
 
+	// API calls
 	http.HandleFunc("/token", handler.TokenHandler)
+	http.HandleFunc("/device", handler.DeviceHandler)
+	http.HandleFunc("/position", handler.PositionHandler)
+	http.HandleFunc("/status", handler.StatusHandler)
+	http.HandleFunc("/mobile", handler.MobileHandler)
 
 	tracelog.Trace("main", "main", "Starting app on port 8801")
 

@@ -42,3 +42,28 @@ type MobileUser struct {
 		Password string `json:"password"`
 	} `json:"user"`
 }
+
+type Device struct {
+	ExpoPushToken string 	`json:"expopushtoken"`
+	Type string 			`json:"type"`
+	Active string 			`json:"active"`
+	Latitude string 		`json:"latitude"`
+	Longitude string 		`json:"longitude"`
+	Mobilenumber string 	`json:"mobilenumber"`
+}
+
+type Position struct {
+	ExpoPushToken string 	`json:"expopushtoken"`
+	Latitude string 		`json:"latitude"`
+	Longitude string 		`json:"longitude"`
+}
+
+type Status struct {
+	ExpoPushToken string 	`json:"expopushtoken"`
+	Active string 			`json:"active"`
+}
+
+type Mobile struct {
+	ExpoPushToken string 	`json:"expopushtoken"`
+	Mobilenumber string 	`json:"mobilenumber"`
+}

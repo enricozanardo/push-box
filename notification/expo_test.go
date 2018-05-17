@@ -28,8 +28,8 @@ func TestSendNotification(t *testing.T) {
 	info.Emergency = &fakeEmergency
 
 	//token := pb_account.Token{"2284fe70432bbef5a5354653c88d8e5cda2880dd"}
-	//token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
-	token := pb_account.Token{"46a249c795cda18c1d8143a781871e1e95d2e011"} //remote
+	token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
+	//token := pb_account.Token{"46a249c795cda18c1d8143a781871e1e95d2e011"} //remote
 
 	fakeAccount, err := mygprc.GetAccountByToken(&token)
 
