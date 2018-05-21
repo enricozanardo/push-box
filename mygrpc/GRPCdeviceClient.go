@@ -16,11 +16,13 @@ func AddDevice (device *pb_device.Device) (response *pb_device.Response) {
 
 	client := pb_device.NewDeviceServiceClient(conn)
 
-	resp, err := client.AddDevice(context.Background(), device)
+	resp, _ := client.AddDevice(context.Background(), device)
 
 	if !resp.Response {
-		tracelog.Errorf(err, "GRPCdeviceClient", "AddDevice", "Error: Device not added" )
-		os.Exit(1)
+		tracelog.Warning("GRPCdeviceClient", "AddDevice", "Error: Device not added or already present" )
+		// Return false as Response
+		falseResponse := pb_device.Response{false}
+		return &falseResponse
 	}
 
 	return resp

@@ -38,11 +38,6 @@ func DeviceHandler(w http.ResponseWriter, req *http.Request) {
 		// Add the device to the BD
 		response := mygprc.AddDevice(&device)
 
-		if !response.Response {
-			tracelog.Errorf(err, "device", "DeviceHandler", "It was not possible to add the device")
-			return
-		}
-
 		//the callback return a text true/false based on the response
 		fmt.Fprintf(w,   utils.BoolToString(response.Response))
 	}
