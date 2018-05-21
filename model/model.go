@@ -35,6 +35,20 @@ type Notification struct {
 	} 							`json:"data"`
 }
 
+type StopNotification struct {
+	To ExpoPushToken 		`json:"to"`
+	Title string 			`json:"title"`
+	Body string 			`json:"body"`
+	Sound Sound 			`json:"sound"`
+	Ttl int32 				`json:"ttl"`
+	Expiration int32 		`json:"expiration"`
+	Priority Priority 		`json:"priority"`
+	Badge int32 			`json:"badge"`
+	Data struct{
+		IsActive bool 			`json:"isactive"`
+	} 							`json:"data"`
+}
+
 type MobileUser struct {
 	Token struct { Value ExpoPushToken `json:"value"` } `json:"token"`
 	User struct{
