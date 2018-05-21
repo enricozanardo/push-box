@@ -6,9 +6,6 @@ package proto;
 service PushService {
     // Send Notifications to a list of Account's devices and return Response
     rpc SendNotifications (Info) returns (PushResponse) {}
-
-    // Send Notifications to close the emergency to a list of Account's devices and return a StopResponse
-    rpc StopNotifications (Stop) returns (StopResponse) {}
 }
 
 message PushResponse {
@@ -28,13 +25,5 @@ message Emergency {
     string lat = 5;
     string lng = 6;
     string time = 7;
-}
-
-message Stop {
-    repeated string deviceTokens = 1;
-    bool isActive = 2;
-}
-
-message StopResponse {
-    bool isClosed = 1;
+    bool isActive = 8;
 }

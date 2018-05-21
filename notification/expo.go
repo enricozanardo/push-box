@@ -16,63 +16,6 @@ const (
 	NOTIFICATION_LIMIT = 100
 )
 
-func StopNotifications (stop *pb_push.Stop) (stopResponse *pb_push.StopResponse, err error) {
-
-	notifications := []model.StopNotification{}
-
-	response := pb_push.StopResponse{}
-
-	for _, device := range stop.DeviceTokens {
-
-		notification := model.StopNotification{}
-		notification.To = model.ExpoPushToken(device)
-		notification.Title = "PulseRescue"
-		notification.Body = "Emergency Closed"
-		notification.Sound = model.SOUND_DEFAULT
-		notification.Priority = model.PRIORITY_DEFAULT
-		//add data of the notification
-		notification.Data.IsActive = stop.IsActive
-		notification.Badge = 0
-
-		// Add in the list the notification
-		if len(notifications) < NOTIFICATION_LIMIT {
-			notifications = append(notifications, notification)
-		}
-	}
-
-	//Send the messages to all the account devices
-	jsonData, err := json.Marshal(notifications)
-
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", APIURL, bytes.NewReader(jsonData))
-
-	if err != nil {
-		log.Println("error,", err)
-	}
-
-	req.Header.Add("accept", "application/json")
-	req.Header.Add("accept-encoding", "gzip, deflate")
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	fmt.Println(string(body))
-
-
-	response.IsClosed = true
-	// Send back the response
-	stopResponse = &response
-
-	return stopResponse, nil
-}
-
-
 func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 
 	notifications := []model.Notification{}
@@ -118,6 +61,7 @@ func SendNotification(info *pb_push.Info) (statusCode *int, err error){
 		notification.Data.Lat = info.Emergency.Lat
 		notification.Data.Lng = info.Emergency.Lng
 		notification.Data.Time = info.Emergency.Time
+		notification.Data.IsActive = info.Emergency.IsActive
 		notification.Badge = 0
 
 		// Add in the list the notification

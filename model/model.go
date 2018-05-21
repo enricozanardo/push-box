@@ -32,6 +32,7 @@ type Notification struct {
 		Lat string 				`json:"lat"`
 		Lng string 				`json:"lng"`
 		Time string 			`json:"time"`
+		IsActive bool 			`json:"isactive"`
 	} 							`json:"data"`
 }
 

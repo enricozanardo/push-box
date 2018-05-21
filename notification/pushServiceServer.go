@@ -48,14 +48,3 @@ func (s *PushServiceServer) SendNotifications(ctx context.Context, info *pb_push
 
 	return &response, nil
 }
-
-func (s *PushServiceServer) StopNotifications (ctx context.Context, stop *pb_push.Stop) (*pb_push.StopResponse, error) {
-
-	stopResponse, err := StopNotifications(stop)
-
-	if err != nil {
-		stopResponse.IsClosed = false
-	}
-
-	return stopResponse, nil
-}
