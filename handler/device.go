@@ -9,6 +9,7 @@ import (
 	"github.com/onezerobinary/push-box/utils"
 	"github.com/onezerobinary/push-box/mygrpc"
 	"github.com/goinggo/tracelog"
+	"github.com/mmcloughlin/geohash"
 )
 
 func DeviceHandler(w http.ResponseWriter, req *http.Request) {
@@ -34,6 +35,7 @@ func DeviceHandler(w http.ResponseWriter, req *http.Request) {
 		device.Latitude = utils.StringToFloat32(data.Latitude)
 		device.Longitude = utils.StringToFloat32(data.Longitude)
 		device.Mobilenumber = data.Mobilenumber
+		device.Geohash = geohash.Encode(float64(device.Latitude), float64(device.Longitude))
 
 		// Add the device to the BD
 		response := mygprc.AddDevice(&device)

@@ -76,6 +76,9 @@ func TestSendStopNotification(t *testing.T) {
 	//TODO: Search and add to the info only the devices that are near to the emergency
 	//TODO: Store them into an array and when the emergency is closed send a notification to close the emergency
 
+	//TODO: use the geo-box
+
+
 	//token := pb_account.Token{"2284fe70432bbef5a5354653c88d8e5cda2880dd"}
 	token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
 	//token := pb_account.Token{"46a249c795cda18c1d8143a781871e1e95d2e011"} //remote
