@@ -1,13 +1,11 @@
 package mygprc
 
 import (
-	"context"
 	"os"
 	pb_device "github.com/onezerobinary/db-box/proto/device"
 	"github.com/goinggo/tracelog"
+	"golang.org/x/net/context"
 )
-
-
 
 func AddDevice (device *pb_device.Device) (response *pb_device.Response) {
 
