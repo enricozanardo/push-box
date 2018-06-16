@@ -11,14 +11,15 @@ import (
 	"google.golang.org/grpc"
 )
 
+
 const (
-	//ADDRESS = "localhost:1982"    // Development address of db-box
-	ADDRESS = "172.104.230.81:1982" // Staging environment of db-box
+	//DB_ADDRESS = "localhost:1982"    // Development
+	DB_ADDRESS = "db-box:1982" // Staging environment
 )
 
 func StartGRPCConnection() (connection *grpc.ClientConn){
 	// set up connection to the gRPC server
-	conn, err := grpc.Dial(ADDRESS, grpc.WithInsecure())
+	conn, err := grpc.Dial(DB_ADDRESS, grpc.WithInsecure())
 	if err != nil {
 		tracelog.Errorf(err, "GRPCaccountClient", "StartGRPCConnection", "Did not open the connection")
 		os.Exit(1)
@@ -92,7 +93,7 @@ func GetAccountByCredentials(credentials *pb_account.Credentials)(account *pb_ac
 }
 
 // Get an Account given the Token
-func GetAccountByToken(token *pb_account.Token)(account *pb_account.Account, error error) {
+func GetAccountByToken(token *pb_account.Token)(account *pb_account.Account) {
 
 	conn := StartGRPCConnection()
 	defer StopGRPCConnection(conn)
@@ -103,13 +104,12 @@ func GetAccountByToken(token *pb_account.Token)(account *pb_account.Account, err
 
 	if err != nil {
 		tracelog.Errorf(err, "GRPCaccountClient", "GetAccountByToken", "Error: It was not possible to retrieve the account")
-		fakeAccount := pb_account.Account{}
-		return &fakeAccount, err
+		os.Exit(1)
 	}
 
 	tracelog.Trace("GRPCaccountClient", "GetAccountByToken", "An account is retrieved")
 
-	return account, nil
+	return account
 }
 
 // Update an Account given the updated Account
@@ -267,30 +267,3 @@ func GetAccounts (empty *pb_account.Empty)(accounts *pb_account.Accounts) {
 
 	return accounts
 }
-
-
-func AddExpoPushToken(expoPushToken *pb_account.ExpoPushToken) (response *pb_account.ExpoResponse) {
-
-	conn := StartGRPCConnection()
-	defer StopGRPCConnection(conn)
-	// Search into the DB the user
-	client := pb_account.NewAccountServiceClient(conn)
-
-	resp, err := client.AddExpoPushToken(context.Background(), expoPushToken)
-
-	if err != nil {
-		tracelog.Errorf(err, "GRPCaccountClient", "AddExpoPushToken", "Error: AddExpoPushToken not added")
-		os.Exit(1)
-	}
-
-	if !resp.Response {
-		tracelog.Trace("GRPCaccountClient", "AddExpoPushToken", "It was not possible to add a new ExpoToken to the account")
-	} else {
-		tracelog.Trace("GRPCaccountClient", "AddExpoPushToken", "A new ExpoToken is added to the account")
-	}
-
-	return resp
-}
-
-
-
