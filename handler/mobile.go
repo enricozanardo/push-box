@@ -8,7 +8,6 @@ import (
 	"github.com/onezerobinary/push-box/mygrpc"
 	"fmt"
 	"github.com/goinggo/tracelog"
-	"errors"
 )
 
 func TokenHandler(w http.ResponseWriter, req *http.Request) {
@@ -30,12 +29,12 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 
 		println(accountToken.Token)
 
-		account, err := mygprc.GetAccountByToken(&accountToken)
+		account := mygprc.GetAccountByToken(&accountToken)
 
-		if err != nil {
-			tracelog.Errorf(err, "mobile", "TokenHandler", "It was not possible to retrieve the account")
-			return
-		}
+		//if err != nil {
+		//	tracelog.Errorf(err, "mobile", "TokenHandler", "It was not possible to retrieve the account")
+		//	return
+		//}
 
 		if account.Username == "" {
 			tracelog.Errorf(err, "mobile", "TokenHandler", "Account empty")
@@ -44,13 +43,18 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Add the device to the user if not already present
 		expotoken := string(data.Token.Value)
-		device := pb_account.ExpoPushToken{expotoken, &accountToken }
-		resp := mygprc.AddExpoPushToken(&device)
 
-		if !resp.Response {
-			err := errors.New("Token not added to the account")
-			tracelog.Error(err, "mobile", "TokenHandler")
-		}
+		fmt.Println("Token: " + expotoken)
+
+		//device := pb_account.ExpoPushToken{expotoken, &accountToken }
+		//mygprc.AddDevice(*device)
+		//
+		//resp := mygprc.AddExpoPushToken(&device)
+		//
+		//if !resp.Response {
+		//	err := errors.New("Token not added to the account")
+		//	tracelog.Error(err, "mobile", "TokenHandler")
+		//}
 
 		//TODO: Retun "" if no math is found
 		//token = ""
