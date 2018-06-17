@@ -32,8 +32,9 @@ func TestSendNotification(t *testing.T) {
 	//TODO: Store them into an array and when the emergency is closed send a notification to close the emergency
 	
 	//token := pb_account.Token{"2284fe70432bbef5a5354653c88d8e5cda2880dd"}
-	token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
+	//token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
 	//token := pb_account.Token{"46a249c795cda18c1d8143a781871e1e95d2e011"} //remote
+	token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} //remote
 
 	fakeAccount := mygprc.GetAccountByToken(&token)
 
@@ -82,7 +83,7 @@ func TestSendStopNotification(t *testing.T) {
 	//token := pb_account.Token{"2284fe70432bbef5a5354653c88d8e5cda2880dd"}
 	//token := pb_account.Token{"e760a31772086f4358c745f7ffeaa78a0987c4ce"}
 	//token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} // local
-	token := pb_account.Token{"46a249c795cda18c1d8143a781871e1e95d2e011"} //remote
+	token := pb_account.Token{"d0a1a743194ff28f049f47b9b69c51563c2cfadf"} //remote
 
 	fakeAccount := mygprc.GetAccountByToken(&token)
 
