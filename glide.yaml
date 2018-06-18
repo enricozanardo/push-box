@@ -7,4 +7,5 @@ import:
 - package: github.com/pkg/errors
 - package: golang.org/x/net/context
 - package: google.golang.org/grpc
+- package: github.com/spf13/viper
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"github.com/onezerobinary/push-box/handler"
 	"github.com/onezerobinary/push-box/notification"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -16,6 +17,16 @@ func main() {
 
 	tracelog.Start(tracelog.LevelTrace)
 	defer tracelog.Stop()
+
+	//development environment
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+
+	if err := viper.ReadInConfig(); err != nil {
+		tracelog.Errorf(err, "main", "main", "Error reading config file")
+	}
+
+	tracelog.Warning("main", "main", "Using config file")
 
 	// Start the PushServer
 	go notification.StartPushService()

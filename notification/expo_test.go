@@ -7,12 +7,24 @@ import (
 	"fmt"
 	pb_push "github.com/onezerobinary/push-box/proto"
 	"github.com/onezerobinary/push-box/mygrpc"
+	"github.com/spf13/viper"
 )
+
+func startConfig() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath("../")
+
+	if err := viper.ReadInConfig(); err != nil {
+		tracelog.Errorf(err, "expo_test", "StartConfig", "Error reading config file")
+	}
+}
 
 func TestSendNotification(t *testing.T) {
 
 	tracelog.Start(tracelog.LevelTrace)
 	defer tracelog.Stop()
+
+	startConfig()
 
 	//Fake emergency
 	fakeEmergency := pb_push.Emergency{}
