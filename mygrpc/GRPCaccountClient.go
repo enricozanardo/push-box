@@ -272,3 +272,27 @@ func GetAccounts (empty *pb_account.Empty)(accounts *pb_account.Accounts) {
 
 	return accounts
 }
+
+
+func AddExpoPushToken (expoPushToken *pb_account.ExpoPushToken) (resp bool) {
+
+	conn := StartGRPCConnection()
+	defer StopGRPCConnection(conn)
+
+	client := pb_account.NewAccountServiceClient(conn)
+
+	isAdded, err := client.AddExpoPushToken(context.Background(), expoPushToken)
+
+	if isAdded.Response == false {
+		resp = false
+	}
+
+	if err != nil {
+		tracelog.Errorf(err, "GRPCaccountClient", "AddExpoPushToken", "Error: It was not possible to add the token")
+		os.Exit(1)
+	}
+
+	tracelog.Trace("GRPCaccountClient", "GetAccounts", "Mobile token successfully added")
+
+	return resp
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/onezerobinary/push-box/mygrpc"
 	"fmt"
 	"github.com/goinggo/tracelog"
+	"errors"
 )
 
 func TokenHandler(w http.ResponseWriter, req *http.Request) {
@@ -27,8 +28,6 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		token := mygprc.GenerateToken(data.User.Username, data.User.Password)
 		accountToken := pb_account.Token{token}
 
-		println(accountToken.Token)
-
 		account := mygprc.GetAccountByToken(&accountToken)
 
 		//if err != nil {
@@ -44,20 +43,17 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		// Add the device to the user if not already present
 		expotoken := string(data.Token.Value)
 
-		fmt.Println("Token: " + expotoken)
+		expoPushTokenDevice := pb_account.ExpoPushToken{expotoken, &accountToken }
+		
+		isAdded := mygprc.AddExpoPushToken(&expoPushTokenDevice)
 
-		//device := pb_account.ExpoPushToken{expotoken, &accountToken }
-		//mygprc.AddDevice(*device)
-		//
-		//resp := mygprc.AddExpoPushToken(&device)
-		//
-		//if !resp.Response {
-		//	err := errors.New("Token not added to the account")
-		//	tracelog.Error(err, "mobile", "TokenHandler")
-		//}
+		if !isAdded {
+			err := errors.New("Token not added to the account")
+			tracelog.Error(err, "mobile", "TokenHandler")
+		}
 
 		//TODO: Retun "" if no math is found
-		//token = ""
+		token = ""
 
 		fmt.Fprintf(w,  token)
 	}
