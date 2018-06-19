@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"github.com/goinggo/tracelog"
 	"errors"
-	pb_device "github.com/onezerobinary/db-box/proto/device"
 )
 
 func TokenHandler(w http.ResponseWriter, req *http.Request) {
@@ -52,20 +51,20 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Add device to the Database if not present
 
-		deviceExpoPushToken := pb_device.ExpoPushToken{ expotoken}
-		device := pb_device.Device{}
-		device.Type = "device"
-		device.Expopushtoken = &deviceExpoPushToken
-		device.Active = false
+		//deviceExpoPushToken := pb_device.ExpoPushToken{ expotoken}
+		//device := pb_device.Device{}
+		//device.Type = "device"
+		//device.Expopushtoken = &deviceExpoPushToken
+		//device.Active = false
+		//
+		//isDeviceAdded := mygprc.AddDevice(&device)
+		//
+		//if !isDeviceAdded.Response {
+		//	err := errors.New("Device not added to the DB")
+		//	tracelog.Error(err, "mobile", "TokenHandler")
+		//}
 
-		isDeviceAdded := mygprc.AddDevice(&device)
-
-		if !isDeviceAdded.Response {
-			err := errors.New("Device not added to the DB")
-			tracelog.Error(err, "mobile", "TokenHandler")
-		}
-
-		tracelog.Trace("mobile", "TokenHandler", "Device added to DB")
+		tracelog.Trace("mobile", "TokenHandler", "############  Device added to DB")
 
 		//TODO: Return "" if no math is found
 		//token = ""
