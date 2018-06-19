@@ -30,11 +30,6 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 
 		account := mygprc.GetAccountByToken(&accountToken)
 
-		//if err != nil {
-		//	tracelog.Errorf(err, "mobile", "TokenHandler", "It was not possible to retrieve the account")
-		//	return
-		//}
-
 		if account.Username == "" {
 			tracelog.Errorf(err, "mobile", "TokenHandler", "Account empty")
 			return
@@ -44,7 +39,7 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		expotoken := string(data.Token.Value)
 
 		expoPushTokenDevice := pb_account.ExpoPushToken{expotoken, &accountToken }
-		
+
 		isAdded := mygprc.AddExpoPushToken(&expoPushTokenDevice)
 
 		if !isAdded {

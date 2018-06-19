@@ -283,6 +283,8 @@ func AddExpoPushToken (expoPushToken *pb_account.ExpoPushToken) (resp bool) {
 
 	isAdded, err := client.AddExpoPushToken(context.Background(), expoPushToken)
 
+	resp = true
+	
 	if isAdded.Response == false {
 		resp = false
 	}
