@@ -48,9 +48,9 @@ func TokenHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		tracelog.Trace("mobile", "TokenHandler", "Token added to account")
-
+		
 		//TODO: Retun "" if no math is found
-		token = ""
+		//token = ""
 
 		fmt.Fprintf(w,  token)
 	}
